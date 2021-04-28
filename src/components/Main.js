@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import video from "../data/video.js";
 import CommentList from "./CommentList";
 
@@ -14,6 +14,26 @@ import CommentList from "./CommentList";
 
 
 function Main () {
+  const currUpvotes = video.upvotes
+  const [upvotesCount, setUpCount] = useState(currUpvotes)
+
+  const currDownvotes = video.downvotes
+  const [downvotesCount, setDownCount] = useState(currDownvotes)
+
+  const [isHidden, setIsHidden] = useState(true)
+  
+  function handleUpvote() {
+    setUpCount(upvotesCount + 1)
+  }
+
+  function handleDownvote() {
+    setDownCount(downvotesCount + 1)
+  }
+
+  function handleHideComments() {
+    setIsHidden(!isHidden)
+  }
+
     return (
         <>
         <iframe
@@ -26,11 +46,11 @@ function Main () {
       />
       <h2> {video.title} </h2>
       <p> {video.views} Views | Uploaded {video.createdAt}  </p>
-      <button > {video.upvotes} 👍 </button> <button> {video.downvotes} 👎 </button>
+      <button onClick={handleUpvote} > {upvotesCount} 👍 </button> <button onClick={handleDownvote}> {downvotesCount} 👎 </button>
       <br></br>
       <br></br>
-      <button> Hide Comments </button>
-      <CommentList comments = {video.comments} />
+      <button onClick={handleHideComments}> {isHidden ? "Hide Comments" : "Show Comments" }</button>
+      {isHidden ? <CommentList comments = {video.comments} /> : null }
       </>
     )
 }
